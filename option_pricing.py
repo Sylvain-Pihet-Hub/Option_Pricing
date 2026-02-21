@@ -1,5 +1,14 @@
 import numpy as np
 from scipy.stats import norm
+import yfinance as yf
+
+class SecurityData:
+
+    def __init__(self, ticker: str, period: str="1y"):
+        self.ticker = ticker
+        self.period = period
+        self.prices = yf.Ticker(self.ticker).history(period=self.period)["Close"]
+        self.current_price = self.prices.iloc[-1]
 
 class BinomialModel:
 
