@@ -1,0 +1,406 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&family=Source+Code+Pro:wght@400;600&display=swap');
+
+/* ── Reset ────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+
+/* ── Base ─────────────────────────────────────── */
+body {
+  background: #f0f2f6;
+  color: #262730;
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 400;
+  min-height: 100vh;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────── */
+.hdr {
+  background: #ffffff;
+  padding: 0 2rem;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e6eaf1;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.hdr-logo {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #262730;
+  letter-spacing: -0.3px;
+}
+.hdr-logo span { color: #ff4b4b; }
+.hdr-tag {
+  font-size: 12px;
+  color: #808495;
+  letter-spacing: 0.3px;
+}
+
+/* ── Page grid ────────────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: calc(100vh - 57px);
+}
+
+/* ── Sidebar ─────────────────────────────────── */
+.sidebar {
+  background: #262730;
+  padding: 2rem 1.25rem 3rem;
+}
+
+/* ── Section labels ───────────────────────────────────────────────────── */
+/* Sidebar labels = white */
+.sidebar .slabel {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #fafafa;
+  margin: 0 0 10px;
+}
+
+/* Content labels = dark */
+.content .slabel {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #262730;
+  margin: 0 0 6px;
+}
+
+.slabel {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #262730;
+  margin: 0 0 6px;
+}
+
+.caption {
+  font-size: 12px;
+  color: #808495;
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+/* ── Radio buttons (sidebar model selector) ───────────────────────────── */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 4px;
+}
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #fafafa;
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: 4px;
+  transition: background 0.12s;
+}
+.radio-label:hover { background: rgba(255,255,255,0.08); }
+.radio-label:has(input:checked) {
+  background: rgba(255,75,75,0.18);
+  color: #ff4b4b;
+  font-weight: 600;
+}
+.radio-input {
+  accent-color: #ff4b4b;
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+/* ── Main content ─────────────────────────────────────────────────────── */
+.content {
+  padding: 2rem 2.5rem 4rem;
+  background: #f0f2f6;
+  overflow-y: auto;
+}
+
+/* ── Model subheader ──────────────────────────────────────────────────── */
+.model-subheader {
+  font-size: 22px;
+  font-weight: 600;
+  color: #262730;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e6eaf1;
+}
+
+/* ── Parameter form ───────────────────────────────────────────────────── */
+.param-form { max-width: 680px; }
+.form-group  { margin-bottom: 1.4rem; }
+
+/* ── Text / number inputs ─────────────────────────────────────────────── */
+.finput {
+  width: 100%;
+  background: #ffffff !important;
+  border: 1px solid #d3d8e2 !important;
+  border-radius: 6px !important;
+  color: #262730 !important;
+  font-family: 'Source Sans 3', sans-serif !important;
+  font-size: 14px !important;
+  padding: 10px 12px !important;
+  height: 45px;
+  margin-top: 4px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none !important;
+}
+.finput:focus {
+  border-color: #ff4b4b !important;
+  box-shadow: 0 0 0 2px rgba(255,75,75,0.15) !important;
+}
+.finput::placeholder { color: #b0b5c3 !important; }
+
+/* ── Dropdown ─────────────────────────────────────────────────────────── */
+.dd .Select-control {
+  background: #ffffff !important;
+  border: 1px solid #d3d8e2 !important;
+  border-radius: 6px !important;
+  min-height: 38px !important;
+  margin-top: 4px;
+}
+.dd .Select-control:hover { border-color: #ff4b4b !important; }
+.dd .Select-value-label,
+.dd .Select-placeholder,
+.dd .Select-input input {
+  color: #262730 !important;
+  font-family: 'Source Sans 3', sans-serif !important;
+  font-size: 14px !important;
+}
+.dd .Select-arrow { border-top-color: #808495 !important; }
+.dd .Select-menu-outer {
+  background: #ffffff !important;
+  border: 1px solid #d3d8e2 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+  margin-top: 4px !important;
+  z-index: 999 !important;
+}
+.dd .Select-option {
+  background: #ffffff !important;
+  color: #262730 !important;
+  font-family: 'Source Sans 3', sans-serif !important;
+  font-size: 14px !important;
+  padding: 8px 12px !important;
+}
+.dd .Select-option.is-focused  { background: #f0f2f6 !important; }
+.dd .Select-option.is-selected { color: #ff4b4b !important; font-weight: 600 !important; }
+
+/* Sliders */
+.slider-group { padding-bottom: 14px; }
+
+.rc-slider-rail   { background: #d3d8e2; height: 4px; }
+.rc-slider-track  { background: #ff4b4b; height: 4px; }
+.rc-slider-handle {
+  border: 2px solid #ff4b4b !important;
+  background: #ffffff !important;
+  width: 14px; height: 14px;
+  margin-top: -5px;
+  box-shadow: none !important;
+}
+.rc-slider-handle:focus,
+.rc-slider-handle:hover {
+  border-color: #e63b3b !important;
+  box-shadow: 0 0 0 4px rgba(255,75,75,0.2) !important;
+}
+.rc-slider-mark-text {
+  color: #808495 !important;
+  font-family: 'Source Sans 3', sans-serif !important;
+  font-size: 11px !important;
+}
+.rc-slider-tooltip-inner {
+  background: #262730 !important;
+  font-family: 'Source Code Pro', monospace !important;
+  font-size: 11px !important;
+  border-radius: 4px !important;
+  padding: 3px 8px !important;
+}
+
+/* ── Date picker ──────────────────────────────────────────────────────── */
+.date-picker .DateInput_input {
+  font-family: 'Source Sans 3', sans-serif !important;
+  font-size: 14px !important;
+  color: #262730 !important;
+  border-bottom: 2px solid transparent !important;
+  padding: 6px 10px !important;
+  background: transparent !important;
+}
+.date-picker .DateInput_input:focus { border-bottom-color: #ff4b4b !important; }
+.date-picker .SingleDatePickerInput {
+  background: #ffffff !important;
+  border: 1px solid #d3d8e2 !important;
+  border-radius: 6px !important;
+  margin-top: 4px;
+}
+.date-picker .SingleDatePickerInput:hover { border-color: #ff4b4b !important; }
+
+/* ── Ticker info chip ─────────────────────────────────────────────────── */
+.ticker-chip {
+  margin-top: 8px;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1px solid #e6eaf1;
+  border-left: 3px solid #ff4b4b;
+  border-radius: 6px;
+}
+.chip-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.chip-ticker {
+  font-size: 18px;
+  font-weight: 700;
+  color: #262730;
+}
+.chip-price {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ff4b4b;
+}
+.chip-vol {
+  font-size: 12px;
+  color: #808495;
+  margin-top: 3px;
+}
+
+/* ── Calculate button ─────────────────────────────────────────────────── */
+.calc-btn {
+  width: 100%;
+  padding: 10px 16px;
+  background: #ff4b4b;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+  margin-top: 8px;
+}
+.calc-btn:hover  {
+  background: #e63b3b;
+  box-shadow: 0 2px 8px rgba(255,75,75,0.3);
+}
+.calc-btn:active { background: #cc3333; }
+
+.err {
+  color: #ff4b4b;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+/* ── Results section ──────────────────────────────────────────────────── */
+.results-divider {
+  border: none;
+  border-top: 1px solid #e6eaf1;
+  margin: 2rem 0;
+}
+
+.chart-card {
+  background: #ffffff;
+  border: 1px solid #e6eaf1;
+  border-radius: 8px;
+  padding: 4px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+/* ── Call / Put price cards ───────────────────────────────────────────── */
+.res-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.res-card {
+  background: #ffffff;
+  border: 1px solid #e6eaf1;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.res-card.call { border-top: 3px solid #09ab3b; }
+.res-card.put  { border-top: 3px solid #0068c9; }
+
+.res-type {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #808495;
+  margin-bottom: 6px;
+}
+.res-price {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 38px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+.res-price.call { color: #09ab3b; }  /* green  */
+.res-price.put  { color: #0068c9; }  /* blue   */
+
+.res-intrinsic {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 12px;
+  color: #808495;
+  margin-top: 6px;
+}
+
+/* ── Section header above tables/charts ──────────────────────────────── */
+.section-hdr {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #808495;
+  margin-bottom: 10px;
+}
+
+/* ── Parameter / parity info table ───────────────────────────────────── */
+.info-table {
+  background: #ffffff;
+  border: 1px solid #e6eaf1;
+  border-radius: 8px;
+  padding: 4px 16px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid #f0f2f6;
+  font-size: 13px;
+}
+.info-row:last-child { border-bottom: none; }
+.info-key {
+  color: #808495;
+  font-size: 13px;
+}
+.info-val {
+  font-family: 'Source Code Pro', monospace;
+  font-weight: 600;
+  color: #262730;
+  font-size: 13px;
+}
+
+/* Misc */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { opacity: 0.4; }
