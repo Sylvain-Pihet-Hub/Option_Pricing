@@ -12,15 +12,16 @@ class SecurityData:
 
 class BinomialModel:
 
-    def __init__(self, S0: float, T: float, n_periods: int, r: float, c:float, up: float):
+    def __init__(self, S0: float, T: float, n_periods: int, r: float, c:float, sigma: float,):
         self.S0 = S0
         self.T = T
         self.n_periods = n_periods
         self.r = r
         self.c = c
-        self.up = up
-        self.down = 1 / self.up
+        self.sigma = sigma
         self.delta_t = self.T / self.n_periods
+        self.up = np.exp(self.sigma * np.sqrt(self.delta_t))
+        self.down = 1 / self.up
         self.q = (np.exp((self.r - self.c) * self.delta_t) - self.down) / (self.up - self.down)
 
     def create_security_price_lattice(self):
