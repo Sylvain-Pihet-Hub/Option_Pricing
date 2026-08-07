@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.stats import norm
 import yfinance as yf
+from datetime import datetime
 
 class SecurityData:
 
@@ -9,6 +10,55 @@ class SecurityData:
         self.period = period
         self.prices = yf.Ticker(self.ticker).history(period=self.period)["Close"]
         self.current_price = self.prices.iloc[-1]
+
+class OptionChainData:
+
+    def __init__(self, ticker: str, risk_free_ticker: str="^IRX"):
+        self.ticker = ticker
+        self.risk_free_ticker = risk_free_ticker
+        self.security = yf.Ticker(self.ticker)
+        self.spot = self.security.history(period="1d")["Close"].iloc[-1]
+        self.expirations = self.security.options
+
+    def risk_free_rate(self):
+        rate_history = yf.Ticker(self.risk_free_ticker).history(period="5d")["Close"]
+        return rate_history.iloc[-1] / 100
+
+    def dividend_yield(self):
+        info = self.security.info
+        return info.get("dividendYield") or info.get("trailingAnnualDividendYield") or 0.0
+
+    def time_to_maturity(self, expiry: str):
+        expiry_date = datetime.strptime(expiry, "%Y-%m-%d")
+        return max((expiry_date - datetime.now()).days, 0) / 365.0
+
+    def fetch_chain(self, expiry: str, is_call: bool=True):
+        if expiry not in self.expirations:
+            raise ValueError(f"No option chain available for expiry {expiry}")
+        if self.time_to_maturity(expiry) <= 0:
+            raise ValueError(f"Cannot fetch chain for expiry {expiry}: option has already expired or expires today")
+        chain = self.security.option_chain(expiry)
+        chain_data = (chain.calls if is_call else chain.puts).copy()
+        return chain_data[chain_data["lastPrice"] > 0].reset_index(drop=True)
+
+    def market_datapoints(self, expiry: str, is_call: bool=True) -> list[dict]:
+        chain_data = self.fetch_chain(expiry, is_call)
+        T = self.time_to_maturity(expiry)
+        return [
+            {
+                "K": row["strike"],
+                "expiry": expiry,
+                "T": T,
+                "is_call": is_call,
+                "market_price": row["lastPrice"],
+                "bid": row["bid"],
+                "ask": row["ask"],
+                "volume": row["volume"],
+                "open_interest": row["openInterest"],
+                "yahoo_implied_vol": row["impliedVolatility"],
+            }
+            for _, row in chain_data.iterrows()
+        ]
 
 class BinomialModel:
 
