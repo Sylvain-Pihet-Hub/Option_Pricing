@@ -39,7 +39,11 @@ class OptionChainData:
             raise ValueError(f"Cannot fetch chain for expiry {expiry}: option has already expired or expires today")
         chain = self.security.option_chain(expiry)
         chain_data = (chain.calls if is_call else chain.puts).copy()
-        return chain_data[chain_data["lastPrice"] > 0].reset_index(drop=True)
+        # Require a valid two-sided market. Implied vol is inverted from the bid/ask midpoint,
+        # so a quote is only usable if both sides exist and the market is not crossed; lastPrice
+        # is not a reliable filter since it can be a stale print from an earlier session.
+        valid = (chain_data["bid"] > 0) & (chain_data["ask"] > 0) & (chain_data["ask"] >= chain_data["bid"])
+        return chain_data[valid].reset_index(drop=True)
 
     def market_datapoints(self, expiry: str, is_call: bool=True) -> list[dict]:
         chain_data = self.fetch_chain(expiry, is_call)
@@ -53,12 +57,34 @@ class OptionChainData:
                 "market_price": row["lastPrice"],
                 "bid": row["bid"],
                 "ask": row["ask"],
+                "mid": (row["bid"] + row["ask"]) / 2,
                 "volume": row["volume"],
                 "open_interest": row["openInterest"],
                 "yahoo_implied_vol": row["impliedVolatility"],
             }
             for _, row in chain_data.iterrows()
         ]
+
+    def otm_datapoints(self, expiry: str) -> list[dict]:
+        """
+        Return one quote per strike, always taken from the out-of-the-money side:
+        puts for K < spot, calls for K >= spot.
+
+        Under put-call parity a put and a call at the same strike/expiry imply the same
+        volatility, so this discards no information. It does avoid ever inverting a deep
+        in-the-money price, where the option is almost all intrinsic value and vega collapses
+        - there the price is nearly flat in vol, so cent-level quote noise maps to enormous
+        swings in implied vol.
+        """
+        calls = {point["K"]: point for point in self.market_datapoints(expiry, is_call=True)}
+        puts = {point["K"]: point for point in self.market_datapoints(expiry, is_call=False)}
+
+        points = []
+        for K in sorted(set(calls) | set(puts)):
+            otm_side = puts if K < self.spot else calls
+            if K in otm_side:
+                points.append(otm_side[K])
+        return points
 
 class BinomialModel:
 
